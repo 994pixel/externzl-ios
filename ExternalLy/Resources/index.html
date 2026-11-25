@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d12">
+  <title>FF Control — Painel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <main id="loginView" class="login-wrap">
+    <section class="login-card">
+      <div class="brand-mark">FF<span>•</span></div>
+      <p class="eyebrow">ACESSO RESTRITO</p>
+      <h1>FF <span>CONTROL</span></h1>
+      <p class="muted">Insira sua licença para continuar.</p>
+      <form id="loginForm">
+        <label for="licenseInput">Sua KEY</label>
+        <div class="key-input"><span>⌘</span><input id="licenseInput" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX" required><button type="button" id="toggleKey" aria-label="Mostrar ou ocultar key">◉</button></div>
+        <button class="btn btn-primary full" type="submit">VALIDAR ACESSO <b>→</b></button>
+        <p id="loginMessage" class="message" role="status">A validação real deve ser feita pela API do servidor.</p>
+      </form>
+      <div class="login-foot"><span class="pulse"></span> SISTEMA DE LICENÇAS</div>
+    </section>
+  </main>
+
+  <main id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="side-brand"><div class="brand-mark small">FF<span>•</span></div><div><b>FF CONTROL</b><small>WEB PANEL</small></div></div>
+      <div class="side-label">MENU PRINCIPAL</div>
+      <button class="nav-item active" data-page="overview"><span>▦</span> Visão geral</button>
+      <button class="nav-item" data-page="settings"><span>⚙</span> Configurações</button>
+      <button class="nav-item" data-page="license"><span>⌑</span> Minha licença</button>
+      <div class="side-label admin-label">ADMINISTRAÇÃO</div>
+      <button class="nav-item" data-page="keys"><span>♢</span> Gerenciar KEYS</button>
+      <div class="sidebar-bottom"><div class="user-chip"><div class="avatar">A</div><div><b>Administrador</b><small>Conta local de demonstração</small></div></div><button id="logoutBtn" class="logout">↪ Sair</button></div>
+    </aside>
+
+    <section class="main-area">
+      <header class="topbar"><div><span class="crumb">PAINEL</span><span class="crumb-sep">/</span><b id="pageCrumb">Visão geral</b></div><div class="top-actions"><span class="online-dot"></span><span class="muted">Interface demonstrativa</span><div class="top-avatar">A</div></div></header>
+      <div class="content">
+        <section class="page active" id="page-overview">
+          <div class="page-heading"><div><p class="eyebrow">CENTRAL DE CONTROLE</p><h2>Visão geral</h2><p class="muted">Acompanhe o estado da sua licença e do painel.</p></div><span class="pill pill-green">● SISTEMA ONLINE</span></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span>LICENÇA</span><span class="stat-icon">⌑</span></div><strong id="overviewLicense">—</strong><small class="positive">Status da sessão</small></article>
+            <article class="stat-card"><div class="stat-top"><span>VALIDADE</span><span class="stat-icon">◷</span></div><strong id="overviewExpiry">Não validada</strong><small class="muted">Expiração informada pela API</small></article>
+            <article class="stat-card"><div class="stat-top"><span>DISPOSITIVOS</span><span class="stat-icon">▣</span></div><strong id="overviewDevices">—</strong><small class="muted">Limite da licença</small></article>
+          </div>
+          <div class="section-title"><div><h3>Acesso rápido</h3><p class="muted">Atalhos para as áreas do painel.</p></div></div>
+          <div class="quick-grid">
+            <button class="quick-card" data-goto="settings"><span class="quick-icon orange">⚙</span><b>Configurações</b><small>Ajustes visuais e preferências</small><i>→</i></button>
+            <button class="quick-card" data-goto="license"><span class="quick-icon blue">⌑</span><b>Minha licença</b><small>Consulte os dados de acesso</small><i>→</i></button>
+            <button class="quick-card" data-goto="keys"><span class="quick-icon purple">♢</span><b>Gerenciar KEYS</b><small>Área administrativa demonstrativa</small><i>→</i></button>
+          </div>
+          <div class="notice"><span>ⓘ</span><div><b>Modo de demonstração</b><p>Esta entrega contém a interface. Autenticação, criação e revogação de licenças precisam ser conectadas ao backend antes de publicar.</p></div></div>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="page-heading"><div><p class="eyebrow">PREFERÊNCIAS</p><h2>Configurações</h2><p class="muted">Organize as opções visuais e salve suas preferências.</p></div></div>
+          <div class="settings-grid">
+            <article class="panel-card"><div class="panel-heading"><div><h3>Interface ESP</h3><p class="muted">Preferências de exibição do painel.</p></div><span class="panel-symbol">▣</span></div>
+              <label class="toggle-row"><span><b>Exibir caixas</b><small>Mostrar opção de caixas no painel</small></span><input type="checkbox" id="espBox" checked><i></i></label>
+              <label class="toggle-row"><span><b>Exibir vida</b><small>Mostrar opção de indicador de vida</small></span><input type="checkbox" id="espHp" checked><i></i></label>
+              <label class="toggle-row"><span><b>Exibir nomes</b><small>Mostrar opção de nomes</small></span><input type="checkbox" id="espName" checked><i></i></label>
+            </article>
+            <article class="panel-card"><div class="panel-heading"><div><h3>Preferências de mira</h3><p class="muted">Controles visuais de configuração.</p></div><span class="panel-symbol">◎</span></div>
+              <label class="field-label" for="fovRange">Campo de visão <b id="fovValue">80%</b></label><input type="range" min="1" max="200" value="80" id="fovRange">
+              <label class="field-label" for="aimPart">Ponto de referência</label><select id="aimPart"><option value="head">Cabeça</option><option value="neck">Pescoço</option><option value="chest">Peito</option></select>
+              <p class="helper">Esses controles apenas salvam preferências da interface; não alteram o jogo.</p>
+            </article>
+            <article class="panel-card"><div class="panel-heading"><div><h3>Preferências gerais</h3><p class="muted">Ajustes locais desta interface.</p></div><span class="panel-symbol">⌘</span></div>
+              <label class="toggle-row"><span><b>Notificações</b><small>Exibir mensagens de confirmação</small></span><input type="checkbox" id="notifications" checked><i></i></label>
+              <label class="toggle-row"><span><b>Salvar neste navegador</b><small>Guardar preferências localmente</small></span><input type="checkbox" id="localSave" checked><i></i></label>
+            </article>
+          </div>
+          <div class="actions"><button id="saveSettings" class="btn btn-primary">SALVAR PREFERÊNCIAS →</button></div>
+        </section>
+
+        <section class="page" id="page-license">
+          <div class="page-heading"><div><p class="eyebrow">CONTA</p><h2>Minha licença</h2><p class="muted">Informações da KEY usada nesta sessão.</p></div></div>
+          <article class="panel-card license-card"><div class="license-head"><div><span class="eyebrow">LICENÇA ATUAL</span><h3 id="licenseKeyText">Não conectada</h3></div><span class="pill pill-amber" id="licenseStatus">AGUARDANDO API</span></div><div class="license-details"><div><small>Validade</small><b id="licenseExpiry">—</b></div><div><small>Dispositivos permitidos</small><b id="licenseLimit">—</b></div><div><small>Identificador da sessão</small><b>Gerado pelo servidor</b></div></div><p class="helper">Os dados desta tela devem vir da resposta autenticada do backend, nunca de valores enviados pelo navegador.</p></article>
+        </section>
+
+        <section class="page" id="page-keys">
+          <div class="page-heading"><div><p class="eyebrow">CONTROLE DE ACESSO</p><h2>Gerenciar KEYS</h2><p class="muted">Interface administrativa para criar e acompanhar licenças.</p></div><button id="newKeyBtn" class="btn btn-primary">＋ GERAR KEY</button></div>
+          <div class="notice"><span>ⓘ</span><div><b>Administração protegida</b><p>O gerenciamento abaixo é uma prévia visual. Em produção, somente uma sessão administrativa autorizada poderá criar, bloquear ou excluir licenças.</p></div></div>
+          <div class="toolbar"><input id="keySearch" placeholder="Buscar por KEY..." aria-label="Buscar por KEY"><select id="keyFilter"><option value="all">Todos os status</option><option value="active">Ativas</option><option value="blocked">Bloqueadas</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>KEY</th><th>VALIDADE</th><th>DISPOSITIVOS</th><th>STATUS</th><th>AÇÕES</th></tr></thead><tbody id="keysTable"><tr><td colspan="5" class="empty">Nenhuma KEY de demonstração criada.</td></tr></tbody></table></div>
+          <p class="table-note">Dados de exemplo ficam apenas nesta sessão do navegador.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="keyDialog" class="modal"><form method="dialog" id="keyForm"><div class="modal-head"><div><p class="eyebrow">NOVA LICENÇA</p><h3>Gerar KEY</h3></div><button class="close" value="cancel" aria-label="Fechar">×</button></div><label class="field-label" for="keyDuration">Validade</label><select id="keyDuration"><option value="1">1 dia</option><option value="7">7 dias</option><option value="30" selected>30 dias</option><option value="90">90 dias</option><option value="365">365 dias</option><option value="custom">Data personalizada</option><option value="permanent">Permanente</option></select><div id="customDateWrap" class="hidden"><label class="field-label" for="customDate">Expira em</label><input type="datetime-local" id="customDate"></div><label class="field-label" for="deviceLimit">Limite de dispositivos</label><input type="number" id="deviceLimit" min="1" max="10" value="1"><div class="modal-actions"><button class="btn btn-ghost" value="cancel">CANCELAR</button><button id="createKey" class="btn btn-primary" value="default">CRIAR KEY</button></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
