@@ -51,6 +51,43 @@ workflows:
           cp -R "$APP_PATH" "$CM_BUILD_DIR/build/unsigned-ipa/Payload/"
           cd "$CM_BUILD_DIR/build/unsigned-ipa"
           /usr/bin/zip -qry "$CM_BUILD_DIR/build/ExternalLy-unsigned.ipa" Payload
+          
+      - name: Package unsigned IPA
+        script: |
+          set -e
+          APP_PATH="$CM_BUILD_DIR/build/DerivedData/Build/Products/Release-iphoneos/$APP_NAME.app"
+          mkdir -p "$CM_BUILD_DIR/build/unsigned-ipa/Payload"
+          cp -R "$APP_PATH" "$CM_BUILD_DIR/build/unsigned-ipa/Payload/"
+          cd "$CM_BUILD_DIR/build/unsigned-ipa"
+          /usr/bin/zip -qry "$CM_BUILD_DIR/build/ExternalLy-unsigned.ipa" Payload
+
+      - name: Validate packaged IPA
+        script: |
+          set -e
+
+          IPA="$CM_BUILD_DIR/build/ExternalLy-unsigned.ipa"
+          CHECK="$CM_BUILD_DIR/build/ipa-check"
+
+          rm -rf "$CHECK"
+          mkdir -p "$CHECK"
+
+          unzip -q "$IPA" -d "$CHECK"
+
+          APP="$CHECK/Payload/ExternalLy.app"
+          PLIST="$APP/Info.plist"
+
+          test -d "$APP"
+          test -f "$PLIST"
+
+          plutil -lint "$PLIST"
+
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$PLIST"
+
+          EXEC=$(/usr/libexec/PlistBuddy -c "Print :CFBundleExecutable" "$PLIST")
+          test -f "$APP/$EXEC"
+
+          echo "PACKAGED IPA VALIDATION SUCCESSFUL"
+
 
     artifacts:
       - build/ExternalLy-unsigned.ipa
