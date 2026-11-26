@@ -1,21 +1,38 @@
 workflows:
-  external-ly-ios:
-    name: External Ly iOS IPA
+  external-ly-unsigned-ipa:
+    name: External Ly - unsigned IPA for authorized signing
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      ios_signing:
-        distribution_type: ad_hoc
-        bundle_identifier: com.externally.panel
+      xcode: latest
       vars:
         XCODE_PROJECT: ExternalLy.xcodeproj
         XCODE_SCHEME: ExternalLy
-      xcode: latest
+        APP_NAME: ExternalLy
     scripts:
-      - name: Apply signing profile
-        script: xcode-project use-profiles
-      - name: Build signed IPA
-        script: xcode-project build-ipa --project "$CM_BUILD_DIR/$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+      - name: Build iOS app without signing
+        script: |
+          xcodebuild \
+            -project "$CM_BUILD_DIR/$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$CM_BUILD_DIR/build/DerivedData" \
+            CODE_SIGN_IDENTITY='' \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Package unsigned IPA
+        script: |
+          set -e
+          APP_PATH="$CM_BUILD_DIR/build/DerivedData/Build/Products/Release-iphoneos/$APP_NAME.app"
+          test -d "$APP_PATH"
+          mkdir -p "$CM_BUILD_DIR/build/unsigned-ipa/Payload"
+          cp -R "$APP_PATH" "$CM_BUILD_DIR/build/unsigned-ipa/Payload/"
+          rm -rf "$CM_BUILD_DIR/build/unsigned-ipa/Payload/$APP_NAME.app/_CodeSignature"
+          rm -f "$CM_BUILD_DIR/build/unsigned-ipa/Payload/$APP_NAME.app/embedded.mobileprovision"
+          cd "$CM_BUILD_DIR/build/unsigned-ipa"
+          /usr/bin/zip -qry "$CM_BUILD_DIR/build/ExternalLy-unsigned.ipa" Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ExternalLy-unsigned.ipa
       - /tmp/xcodebuild_logs/*.log
