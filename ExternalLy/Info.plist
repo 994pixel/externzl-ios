@@ -4,6 +4,8 @@
 <key>CFBundleDisplayName</key><string>External Ly</string>
 <key>CFBundleIdentifier</key><string>com.externally.panel</string>
 <key>CFBundleName</key><string>ExternalLy</string>
+<key>CFBundleExecutable</key>
+<string>ExternalLy</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>1.0</string>
 <key>CFBundleVersion</key><string>1</string>
